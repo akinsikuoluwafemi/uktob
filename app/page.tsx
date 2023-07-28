@@ -1,64 +1,15 @@
 "use client";
 
-import Image from "next/image";
-import styles from "./page.module.css";
 import Container from "@mui/material/Container";
-import { styled, alpha } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Box, Button, InputBase, Pagination, Typography } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { Box, Typography } from "@mui/material";
 import { useGetAllPokemonQuery } from "@/features/apiSlice";
 import PokemonList from "@/components/PokemonList";
-import { ChangeEvent, useState } from "react";
-import { useEffect } from "react";
-import { LocalStateWrapper, useLocalState } from "@/context";
-import AppBar from "@mui/material/AppBar";
-
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
+import { useLocalState } from "@/context";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
-  const [pageNum, setPageNum] = useState(1);
-  const [offSet, setOffSet] = useState(0);
+  const { offSet } = useLocalState();
   const { data, error, isLoading } = useGetAllPokemonQuery({
     offset: offSet,
     limit: 20,
@@ -95,17 +46,7 @@ export default function Home() {
     );
   }
 
-  const changePage = (e: ChangeEvent<unknown>, page: number) => {
-    // console.log(page);
-    setPageNum(page);
-    const offset = (page - 1) * 20;
-    setOffSet(offset);
-  };
-
-  console.log(offSet);
-
   return (
-    // <LocalStateWrapper>
     <Container fixed>
       <Box
         sx={{
@@ -114,44 +55,7 @@ export default function Home() {
           marginTop: "20px",
         }}
       >
-        <AppBar position="static" sx={{ padding: "10px" }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Pagination
-              onChange={changePage}
-              color="primary"
-              count={data?.count}
-              page={pageNum}
-            />
-
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Search>
-                <SearchIconWrapper>
-                  <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder="Search…"
-                  inputProps={{ "aria-label": "search" }}
-                />
-              </Search>
-
-              <Button variant="contained" color="success">
-                Search
-              </Button>
-            </Box>
-          </Box>
-        </AppBar>
+        <Navbar count={data?.count} />
 
         <Box
           sx={{
@@ -178,6 +82,5 @@ export default function Home() {
         </Box>
       </Box>
     </Container>
-    // </LocalStateWrapper> */}
   );
 }

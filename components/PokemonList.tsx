@@ -1,4 +1,4 @@
-import { Pokemon, PokemonAbility } from "@/types";
+import { Pokemon, SinglePokemon } from "@/types";
 import { Box } from "@mui/system";
 import React from "react";
 import PokemonItem from "./PokemonItem";
@@ -14,7 +14,7 @@ const PokemonList = ({ data }: { data: Pokemon | undefined }) => {
         flexWrap: "wrap",
       }}
     >
-      {data?.results.map((item: PokemonAbility) => (
+      {data?.results.map((item: SinglePokemon) => (
         <PokemonItem item={item} />
       ))}
     </Box>

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 export const LocalStateContext = createContext<{
   handlePage: (page: number) => void;
@@ -30,8 +30,6 @@ export const LocalStateWrapper = ({
     setPageNum(page);
     const offset = (page - 1) * 20;
     setOffSet(offset);
-
-    console.log(page);
   };
 
   return (
